@@ -4,42 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini WhatsApp</title>
-  
-  <!-- Configuration PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#075e54">
-  <link rel="apple-touch-icon" href="icon.png">
-
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-  <!-- Connexion -->
-  <div id="login-screen" class="screen active">
-    <div class="login-card">
-      <h2>🟢 Mini WhatsApp</h2>
+  <div class="app-container">
+    <!-- ÉCRAN 1 : Saisie du pseudo -->
+    <div id="login-screen" class="card">
+      <h2>Mini WhatsApp</h2>
       <p>Entrez votre pseudo pour commencer</p>
-      <input type="text" id="username-input" placeholder="Votre pseudo..." maxlength="15">
+      <input type="text" id="username-input" placeholder="Votre pseudo..." required>
       <button id="join-btn">Rejoindre le chat</button>
     </div>
-  </div>
 
-  <!-- Interface de Chat -->
-  <div id="chat-screen" class="screen">
-    <header class="chat-header">
-      <div class="header-info">
-        <h3>💬 Discussion Groupe</h3>
-        <span id="active-users-count">0 en ligne</span>
+    <!-- ÉCRAN 2 : Zone de discussion -->
+    <div id="chat-screen" class="card" style="display: none;">
+      <div class="chat-header">
+        <h2>Discussion</h2>
+        <span id="user-count">0 en ligne</span>
       </div>
-      <button id="pwa-install-btn" style="display: none;">📲 Installer App</button>
-    </header>
 
-    <main id="messages-container" class="messages-container"></main>
+      <div id="messages-container" class="messages-container"></div>
 
-    <footer class="chat-footer">
-      <input type="text" id="message-input" placeholder="Tapez un message..." autocomplete="off">
-      <button id="send-btn">Envoyer</button>
-    </footer>
+      <!-- FORMULAIRE DE MESSAGE (Désactivé au départ) -->
+      <form id="chat-form">
+        <input type="text" id="message-input" placeholder="Écrivez un message..." disabled required />
+        <button type="submit" id="send-btn" disabled>Envoyer</button>
+      </form>
+    </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
