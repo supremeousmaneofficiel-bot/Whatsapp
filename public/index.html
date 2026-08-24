@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini WhatsApp</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
@@ -14,8 +13,8 @@
     <div id="login-screen" class="card">
       <h2>Mini WhatsApp</h2>
       <p>Entrez votre pseudo pour commencer</p>
-      <input type="text" id="username-input" placeholder="Votre pseudo..." required>
-      <button id="join-btn">Rejoindre le chat</button>
+      <input type="text" id="username-input" placeholder="Votre pseudo..." autocomplete="off">
+      <button type="button" id="join-btn">Rejoindre le chat</button>
     </div>
 
     <!-- ÉCRAN 2 : Zone de discussion -->
@@ -27,9 +26,9 @@
 
       <div id="messages-container" class="messages-container"></div>
 
-      <!-- FORMULAIRE DE MESSAGE (Désactivé au départ) -->
+      <!-- FORMULAIRE DE MESSAGE -->
       <form id="chat-form">
-        <input type="text" id="message-input" placeholder="Écrivez un message..." disabled required />
+        <input type="text" id="message-input" placeholder="Écrivez un message..." autocomplete="off" disabled>
         <button type="submit" id="send-btn" disabled>Envoyer</button>
       </form>
     </div>
