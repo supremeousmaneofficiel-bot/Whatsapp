@@ -12,25 +12,28 @@ const userCount = document.getElementById('user-count');
 
 let currentUser = '';
 
-// Rejoindre le chat
+// Quand on clique sur "Rejoindre le chat"
 joinBtn.addEventListener('click', () => {
   const username = usernameInput.value.trim();
-  if (username) {
+  if (username !== '') {
     currentUser = username;
     
-    // Débloquer le champ de texte et le bouton d'envoi
+    // Débloquer l'envoi de message
     messageInput.disabled = false;
     sendBtn.disabled = false;
 
-    // Masquer la connexion et afficher le chat
+    // Cacher l'écran de pseudo et afficher le chat
     loginScreen.style.display = 'none';
-    chatScreen.style.display = 'flex';
+    chatScreen.style.display = 'block';
 
+    // Prévenir le serveur
     socket.emit('user-joined', currentUser);
+  } else {
+    alert('Veuillez entrer un pseudo valide !');
   }
 });
 
-// Envoyer un message
+// Envoi d'un message
 chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const text = messageInput.value.trim();
@@ -40,21 +43,23 @@ chatForm.addEventListener('submit', (e) => {
   }
 });
 
-// Recevoir les messages (historique + nouveaux)
+// Réception des messages isolés
 socket.on('message', (data) => {
   addMessageToUI(data);
 });
 
+// Réception de l'historique
 socket.on('load-messages', (messages) => {
   messagesContainer.innerHTML = '';
   messages.forEach(msg => addMessageToUI(msg));
 });
 
-// Compteur en ligne
+// Mise à jour du compteur
 socket.on('user-count', (count) => {
   userCount.textContent = `${count} en ligne`;
 });
 
+// Fonction pour afficher un message à l'écran
 function addMessageToUI(data) {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('message');
