@@ -12,58 +12,63 @@ const userCount = document.getElementById('user-count');
 
 let currentUser = '';
 
-// Quand on clique sur "Rejoindre le chat"
-joinBtn.addEventListener('click', () => {
-  const username = usernameInput.value.trim();
-  if (username !== '') {
-    currentUser = username;
-    
-    // Débloquer l'envoi de message
-    messageInput.disabled = false;
-    sendBtn.disabled = false;
+// Se connecter au chat
+if (joinBtn) {
+  joinBtn.addEventListener('click', () => {
+    const username = usernameInput ? usernameInput.value.trim() : '';
+    if (username !== '') {
+      currentUser = username;
 
-    // Cacher l'écran de pseudo et afficher le chat
-    loginScreen.style.display = 'none';
-    chatScreen.style.display = 'block';
+      if (messageInput) messageInput.disabled = false;
+      if (sendBtn) sendBtn.disabled = false;
 
-    // Prévenir le serveur
-    socket.emit('user-joined', currentUser);
-  } else {
-    alert('Veuillez entrer un pseudo valide !');
-  }
-});
+      if (loginScreen) loginScreen.style.display = 'none';
+      if (chatScreen) chatScreen.style.display = 'block';
 
-// Envoi d'un message
-chatForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const text = messageInput.value.trim();
-  if (text && currentUser) {
-    socket.emit('send-message', { user: currentUser, text: text });
-    messageInput.value = '';
-  }
-});
+      socket.emit('user-joined', currentUser);
+    } else {
+      alert('Veuillez entrer un pseudo valide !');
+    }
+  });
+}
 
-// Réception des messages isolés
+// Envoyer un message
+if (chatForm) {
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = messageInput ? messageInput.value.trim() : '';
+    if (text && currentUser) {
+      socket.emit('send-message', { user: currentUser, text: text });
+      messageInput.value = '';
+    }
+  });
+}
+
+// Écouteurs d'événements Socket.io
 socket.on('message', (data) => {
   addMessageToUI(data);
 });
 
-// Réception de l'historique
 socket.on('load-messages', (messages) => {
-  messagesContainer.innerHTML = '';
-  messages.forEach(msg => addMessageToUI(msg));
+  if (messagesContainer) {
+    messagesContainer.innerHTML = '';
+    messages.forEach((msg) => addMessageToUI(msg));
+  }
 });
 
-// Mise à jour du compteur
 socket.on('user-count', (count) => {
-  userCount.textContent = `${count} en ligne`;
+  if (userCount) {
+    userCount.textContent = `${count} en ligne`;
+  }
 });
 
-// Fonction pour afficher un message à l'écran
+// Afficher le message dans le DOM
 function addMessageToUI(data) {
+  if (!messagesContainer) return;
+
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('message');
-  
+
   if (data.user === currentUser) {
     msgDiv.classList.add('my-message');
   } else {
